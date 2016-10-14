@@ -2,6 +2,7 @@ package xyz.cybersapien.habittracker.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import xyz.cybersapien.habittracker.data.HabitContract.HabitEntry;
@@ -90,15 +91,49 @@ public class HabitDbHelper extends SQLiteOpenHelper {
         values.put(HabitEntry.COLUMN_HABIT_SATURDAY, days[5]?"1":"0");
         values.put(HabitEntry.COLUMN_HABIT_SUNDAY, days[6]?"1":"0");
         values.put(HabitEntry.COLUMN_HABIT_WEEKS, weeks);
+
         return db.insert(HabitEntry.TABLE_NAME, null, values);
+
     }
 
     /**
-     *
+     * Returns a cursor with names of all the Habits
      */
-    public long removeHabit(SQLiteDatabase db, int id){
+    public Cursor showHabitsList(){
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        String[] projection = {
+                HabitEntry._ID,
+                HabitEntry.COLUMN_HABIT_NAME };
 
-        return 0;
+        return db.query(HabitEntry.TABLE_NAME,
+                projection,
+                null, null, null, null, null);
     }
+
+    /**
+     * Returns a cursor with all the information for the habits
+     * To be used to make a list for the database.
+     */
+    public Cursor getHabitsList(){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                HabitEntry._ID,
+                HabitEntry.COLUMN_HABIT_NAME,
+                HabitEntry.COLUMN_HABIT_MONDAY,
+                HabitEntry.COLUMN_HABIT_TUESDAY,
+                HabitEntry.COLUMN_HABIT_WEDNESDAY,
+                HabitEntry.COLUMN_HABIT_THURSDAY,
+                HabitEntry.COLUMN_HABIT_FRIDAY,
+                HabitEntry.COLUMN_HABIT_SATURDAY,
+                HabitEntry.COLUMN_HABIT_SUNDAY,
+                HabitEntry.COLUMN_HABIT_WEEKS
+        };
+
+        return db.query(HabitEntry.TABLE_NAME,
+                projection, null, null, null, null, HabitEntry.COLUMN_HABIT_WEEKS + " ASC");
+    }
+
 }
