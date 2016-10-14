@@ -70,13 +70,35 @@ public class HabitDbHelper extends SQLiteOpenHelper {
 
     /**
      * Method to add a new habit to the table
+     * When called in an activity, Enter an array of 7 booleans, each representing
+     * one day of a week, starting from monday.
+     * The method will prematurely return -1 if the number of booleans in days array is not 7.
+     * else it returns the number of rows in the Table after inserting the new row.
      */
     public long insertHabit(SQLiteDatabase db, String habitName,
                             boolean days[], int weeks){
-
+        if (days.length!=7){
+            return -1;
+        }
         ContentValues values = new ContentValues();
         values.put(HabitEntry.COLUMN_HABIT_NAME, habitName);
-
+        values.put(HabitEntry.COLUMN_HABIT_MONDAY, days[0]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_TUESDAY, days[1]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_WEDNESDAY, days[2]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_THURSDAY, days[3]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_FRIDAY, days[4]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_SATURDAY, days[5]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_SUNDAY, days[6]?"1":"0");
+        values.put(HabitEntry.COLUMN_HABIT_WEEKS, weeks);
         return db.insert(HabitEntry.TABLE_NAME, null, values);
+    }
+
+    /**
+     *
+     */
+    public long removeHabit(SQLiteDatabase db, int id){
+
+
+        return 0;
     }
 }
